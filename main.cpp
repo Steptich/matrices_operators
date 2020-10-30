@@ -9,9 +9,9 @@ std::cout <<A.at(0,0) << "\n";
 std::cout << B(1,1) << "\n"; //jiz vyuziti pretizeneho ()
 std::cout << A << "\n";
 std::cout << ~A;
-/*Matrix C(0);
+Matrix C(0);
 C = A+B; //stejne jako operator+(m,n)
-std::cout << C;*/
+std::cout << C;
 
     return 0;
 }

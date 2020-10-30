@@ -3,7 +3,7 @@
 //
 
 #include "matirx.h"
-#include "ostream"
+#include "iostream"
 Matrix::Matrix(Number diag) {
     //vytvor matici a dej argument na diagonalu
     allocateMemory();
@@ -37,7 +37,7 @@ Matrix::~Matrix() {
     releaseMemory();
 }
 
-void Matrix::copyDataFrom(Matrix &src) {
+void Matrix::copyDataFrom(Matrix &src) const {
 //odkazy prvku src jsou tu, takze vlastne stejna matice jen v jine pameti,
 // ale meni se oboje stejne
     for (int i = 0; i < N; ++i)
@@ -114,6 +114,26 @@ Number Matrix::operator~() const {
     }
     return trace;
 }
+//leva strana predstavuje instance *this, pravou &rhs
+Matrix &Matrix::operator=(Matrix &rhs) {
+
+    if(this != &rhs)//pokud to neni identicka matice
+    {
+        this->copyDataFrom(rhs);//zkopiruj sem pravou stranu
+    }
+
+    return *this;
+}
+
+void Matrix::print() const {
+    int n = getDim();
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            std::cout << data[i][j];
+        }
+        std::cout << "\n";
+    }
+}
 
 Matrix operator+ (Matrix &A, Matrix &B)
 {   Matrix C(0) ;
@@ -122,7 +142,18 @@ Matrix operator+ (Matrix &A, Matrix &B)
         for (int j = 0; j < n; ++j) {
             C(i,j)=A(i,j)+B(i,j); //vyuzivam pretizeneho operatoru ()
         }
-    } //problem je ze C je lokalni promena a pozdeji v main
+    } //problem je ze C je lokalni promena, ulozi se adresa C.data a pozdeji v main
     // se pracuje jiz se zrusenou pameti
+    return C;
+}
+
+Matrix operator- (Matrix &A, Matrix &B) {
+    Matrix C(0);
+    int n = A.getDim();
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            C(i, j) = A(i, j) - B(i, j);
+        }
+    }
     return C;
 }

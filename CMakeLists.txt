@@ -3,4 +3,4 @@ project(matrices_operators)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(matrices_operators main.cpp matrix.cpp)
+add_executable(matrices_operators main.cpp matrix.cpp AutoPtr.cpp AutoPtr.h)
