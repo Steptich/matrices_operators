@@ -10,8 +10,12 @@ AutoPtr::AutoPtr(Matrix *m)
     :pm(m), owner(true)
 {}
 
-AutoPtr::AutoPtr(AutoPtr &other) {
-
+AutoPtr::AutoPtr(AutoPtr &other)
+    :pm(other.pm), owner(other.owner)
+{
+    //chceme aby nova instance prevzala vlastnictvi,
+    //ukazuji na stejne misto, ale vlastnik jen jeden
+    other.owner= false; //takze puvodni vlastnictvi zrusim
 }
 
 AutoPtr::~AutoPtr() {
@@ -22,7 +26,18 @@ AutoPtr::~AutoPtr() {
 }
 
 AutoPtr &AutoPtr::operator=(AutoPtr &rhs) {
-    return ;
+    if(this == &rhs)
+    {//pro pripad ze to jiz mam, abych si nevzal vlastnictvi
+        return *this;
+    }
+    if(this->owner)
+    {//pokud jiz je tak mazu a dam nova data
+        delete pm;
+    }
+    this->pm=rhs.pm;
+    this->owner=rhs.owner;
+    rhs.owner= false;
+    return *this;
 }
 
 Matrix *AutoPtr::operator->() {

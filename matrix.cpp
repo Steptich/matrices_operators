@@ -127,9 +127,10 @@ Matrix &Matrix::operator=(Matrix &rhs) {
 
 void Matrix::print() const {
     int n = getDim();
+    std::cout << "\n";
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
-            std::cout << data[i][j];
+            std::cout << data[i][j] << "\t";
         }
         std::cout << "\n";
     }
