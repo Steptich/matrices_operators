@@ -10,7 +10,7 @@ std::cout << B(1,1) << "\n"; //jiz vyuziti pretizeneho ()
 std::cout << A << "\n";
 std::cout << ~A;
 /*Matrix C(0);
-C = A+B;
+C = A+B; //stejne jako operator+(m,n)
 std::cout << C;*/
 
     return 0;

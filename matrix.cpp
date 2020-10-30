@@ -5,12 +5,14 @@
 #include "matirx.h"
 #include "ostream"
 Matrix::Matrix(Number diag) {
+    //vytvor matici a dej argument na diagonalu
     allocateMemory();
     for (int i = 0; i < N; ++i)
     {
         for (int j = 0; j < N; ++j)
         {
-            data[i][j]= (i==j ? diag:0);
+            data[i][j]= (i==j ? diag:0); // if(i==j){data[i][j]=diag}
+                                         // else {data[i][j]=0}
         }
     }
 }//musim zvlast jelikoz operator , by vzal jen posledni hodnotu
@@ -36,7 +38,8 @@ Matrix::~Matrix() {
 }
 
 void Matrix::copyDataFrom(Matrix &src) {
-
+//odkazy prvku src jsou tu, takze vlastne stejna matice jen v jine pameti,
+// ale meni se oboje stejne
     for (int i = 0; i < N; ++i)
     {
         for (int j = 0; j < N ; ++j)
@@ -54,7 +57,7 @@ Matrix::Matrix(Matrix &other)
 std::ostream& operator <<(std::ostream &os,Matrix &m)
 {   //pouzivam ostream jelikoz je to predek iostream a lze tak pouzivat i
     //fstream atd.
-    int n; = m.getDim();
+    int n = m.getDim();
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
             //nejde pretizit indexovaci operator jelikoz je pak binarni
@@ -119,6 +122,7 @@ Matrix operator+ (Matrix &A, Matrix &B)
         for (int j = 0; j < n; ++j) {
             C(i,j)=A(i,j)+B(i,j); //vyuzivam pretizeneho operatoru ()
         }
-    }
+    } //problem je ze C je lokalni promena a pozdeji v main
+    // se pracuje jiz se zrusenou pameti
     return C;
 }
