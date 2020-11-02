@@ -27,10 +27,12 @@ void Matrix::allocateMemory() {
 
 
 void Matrix::releaseMemory() {
-    for (int i = 0; i < N; ++i) {
-        delete [] data[i];
+    if(data) {//pokud ukazuje do nully tak neuvolni pamet, kvuli move operatoru
+        for (int i = 0; i < N; ++i) {
+            delete[] data[i];
+        }
+        delete[] data;
     }
-    delete [] data;
 }
 
 Matrix::~Matrix() {
@@ -52,6 +54,13 @@ Matrix::Matrix(Matrix &other)
 {
     allocateMemory();
     copyDataFrom(other);
+}
+
+Matrix::Matrix(Matrix &&other)
+    :data(other.data)
+{
+    other.data = nullptr; //zmenim instanci a tamta vymazu,
+    // nevytvarim novou pamet, takze netreba nic delete
 }
 
 std::ostream& operator <<(std::ostream &os,Matrix &m)
@@ -119,10 +128,19 @@ Matrix &Matrix::operator=(Matrix &rhs) {
 
     if(this != &rhs)//pokud to neni identicka matice
     {
-        this->copyDataFrom(rhs);//zkopiruj sem pravou stranu
+        this->copyDataFrom(rhs);//zkopiruj sem pravou stranu, ne jen ukazatel na ne
     }
 
     return *this;
+}
+//move operator prirazeni
+Matrix &Matrix::operator=(Matrix &&rhs){
+    if(this == &rhs){
+        return *this; //pokud jiz mam tak rovnou vratim
+    }
+
+    this->data = rhs.data; //takhle je to jen melka kopie, ukazatel na puvodni data
+    rhs.data= nullptr; //sberu data prave strane, destruktor nebude delat nic
 }
 
 void Matrix::print() const {
@@ -136,6 +154,9 @@ void Matrix::print() const {
     }
 }
 
+
+
+
 Matrix operator+ (Matrix &A, Matrix &B)
 {   Matrix C(0) ;
     int n = A.getDim();
@@ -144,7 +165,7 @@ Matrix operator+ (Matrix &A, Matrix &B)
             C(i,j)=A(i,j)+B(i,j); //vyuzivam pretizeneho operatoru ()
         }
     } //problem je ze C je lokalni promena, ulozi se adresa C.data a pozdeji v main
-    // se pracuje jiz se zrusenou pameti
+    // se pracuje jiz se zrusenou pameti, treba pretizit operator =
     return C;
 }
 

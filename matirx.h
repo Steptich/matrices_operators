@@ -16,12 +16,14 @@ class Matrix
     void copyDataFrom(Matrix &src) const ;
 public:
     Matrix(Number diag);
-    Matrix(Matrix &other);
+    Matrix(Matrix &other); //kopirovaci konstruktor, hluboka kopie
+    Matrix(Matrix &&other); //move konstruktor
     ~Matrix();
     int getDim() const {return N;}
     Number & at(int i, int j) {return data[i][j];} //data kde jsem
     Number & operator()  (int i , int j);
     Matrix& operator=(Matrix &rhs); //delame odkaz aby se mohlo retezit operator prirazeni
+    Matrix & operator=(Matrix &&rhs); //stehovaci operator prizareni
     bool operator==(const Matrix &rhs);
     bool operator!=(const Matrix &rhs);
     Number operator~() const; //bitova negace, zmeni nuly na jednicky, zmenim si na co chci
